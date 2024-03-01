@@ -39,13 +39,22 @@ envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
     });
     if (envelope) {
         req.envelopeId = envelopeId;
-        req.envelope = envelope;
         next();
     } else {
         res.status(404).send(`Envelope with id ${envelopeId} was not found.`);
     }
 });
 
-envelopeRouter.get('/:envelopeId', (req, res, next) => {
-    res.send(req.envelope);
+envelopeRouter.get('/:envelopeId/', (req, res, next) => {
+    res.send(envelopes[req.envelope]);
+});
+
+envelopeRouter.put('/:envelopeId/', (req, res, next) => {
+    const envelope = {
+        id: req.envelopeId,
+        title: req.body.title,
+        budget: req.body.budget
+    };
+    envelopes[req.envelopeId] = envelope;
+    res.status(203).send(envelope);    
 });
