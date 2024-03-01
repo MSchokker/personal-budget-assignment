@@ -32,3 +32,16 @@ envelopeRouter.post('/', (req, res, next) => {
         res.status(400).send();
     }
 });
+
+envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
+    const envelope = envelopes.find((item) => {
+        return item.id === envelopeId;
+    });
+    if (envelope) {
+        req.envelopeId = envelopeId;
+        req.envelope = envelope;
+        next();
+    } else {
+        res.status(404).send(`Envelope with id ${envelopeId} was not found.`);
+    }
+})
