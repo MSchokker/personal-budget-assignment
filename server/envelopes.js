@@ -44,4 +44,8 @@ envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
     } else {
         res.status(404).send(`Envelope with id ${envelopeId} was not found.`);
     }
-})
+});
+
+envelopeRouter.get('/:envelopeId', (req, res, next) => {
+    res.send(req.envelope);
+});
