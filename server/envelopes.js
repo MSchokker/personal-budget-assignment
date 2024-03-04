@@ -45,11 +45,11 @@ envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
     }
 });
 
-envelopeRouter.get('/:envelopeId/', (req, res, next) => {
+envelopeRouter.get('/:envelopeId', (req, res, next) => {
     res.send(envelopes[req.envelope]);
 });
 
-envelopeRouter.put('/:envelopeId/', (req, res, next) => {
+envelopeRouter.put('/:envelopeId', (req, res, next) => {
     const envelope = {
         id: req.envelopeId,
         title: req.body.title,
@@ -57,4 +57,12 @@ envelopeRouter.put('/:envelopeId/', (req, res, next) => {
     };
     envelopes[req.envelopeId] = envelope;
     res.status(203).send(envelope);    
+});
+
+envelopeRouter.delete('/:envelopeId', (req, res, next) => {
+    const index = envelopes.findIndex((envelope) => {
+        return envelope.id === req.envelopeId;
+    });
+    envelopes.slice(index, 1);
+    res.status(204).send();
 });
