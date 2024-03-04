@@ -1,0 +1,28 @@
+h1 {
+    text-align: center;
+}
+
+#envelope-list {
+    display: flex;
+}
+
+.envelope {
+    padding: 10px;
+    color: black;
+    font-weight: bold;
+    border: 1px solid grey;
+    width: 200px;
+    text-align: center; 
+    margin-left: 20px;
+}
+
+.envelope .budget {
+    margin-top: 10px;
+    display: block;
+    color: red;
+}
+
+.envelope button {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
