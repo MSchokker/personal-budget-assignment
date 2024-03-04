@@ -34,11 +34,12 @@ envelopeRouter.post('/', (req, res, next) => {
 });
 
 envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
-    const envelope = envelopes.find((item) => {
-        return item.id === envelopeId;
+    const index = envelopes.findIndex((envelope) => {
+        return envelope.id === envelopeId;
     });
-    if (envelope) {
+    if (index !== -1) {
         req.envelopeId = envelopeId;
+        req.envelopeIndex = index;
         next();
     } else {
         res.status(404).send(`Envelope with id ${envelopeId} was not found.`);
@@ -46,7 +47,7 @@ envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
 });
 
 envelopeRouter.get('/:envelopeId', (req, res, next) => {
-    res.send(envelopes[req.envelope]);
+    res.send(envelopes[req.envelopeIndex]);
 });
 
 envelopeRouter.put('/:envelopeId', (req, res, next) => {
@@ -55,14 +56,11 @@ envelopeRouter.put('/:envelopeId', (req, res, next) => {
         title: req.body.title,
         budget: req.body.budget
     };
-    envelopes[req.envelopeId] = envelope;
+    envelopes[req.envelopeIndex] = envelope;
     res.status(203).send(envelope);    
 });
 
 envelopeRouter.delete('/:envelopeId', (req, res, next) => {
-    const index = envelopes.findIndex((envelope) => {
-        return envelope.id === req.envelopeId;
-    });
-    envelopes.slice(index, 1);
+    envelopes.splice(req.envelopeIndex, 1);
     res.status(204).send();
 });
