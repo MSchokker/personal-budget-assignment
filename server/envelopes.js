@@ -17,6 +17,13 @@ const createEnvelope = (title, budget) => {
     }
 };
 
+const findEnvelopeIndex = (envelopeId) => {
+    const index = envelopes.findIndex((envelope) => {
+        return envelope.id === envelopeId;
+    });
+    return index;
+};
+
 module.exports = envelopeRouter;
 
 envelopeRouter.get('/', (req, res, next) => {
@@ -34,9 +41,7 @@ envelopeRouter.post('/', (req, res, next) => {
 });
 
 envelopeRouter.param('envelopeId', (req, res, next, envelopeId) => {
-    const index = envelopes.findIndex((envelope) => {
-        return envelope.id === envelopeId;
-    });
+    const index = findEnvelopeIndex(req.envelopeId);
     if (index !== -1) {
         req.envelopeId = envelopeId;
         req.envelopeIndex = index;
@@ -63,4 +68,22 @@ envelopeRouter.put('/:envelopeId', (req, res, next) => {
 envelopeRouter.delete('/:envelopeId', (req, res, next) => {
     envelopes.splice(req.envelopeIndex, 1);
     res.status(204).send();
+});
+
+envelopeRouter.post('/:from/:to', (req, res, next) => {
+    const amount = req.header.amount;
+    const indexFrom = findEnvelopeIndex(req.envelopeId);
+    const indexTo = findEnvelopeIndex(req.envelopeId);
+    if(indexFrom !== -1 && indexFrom !== -1) {
+        if(amount > 0) {
+            envelopes[indexFrom].amount -= amount;
+            envelopes[indexTo].amount += amount;
+            res.status(203).send('Transfer completed.');
+        } else {
+            res.status(400).send('Please provide a positive amount');
+        }
+        
+    } else {
+        res.status(404).send('Please enter valid to and from envelopes.')
+    }
 });
